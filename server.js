@@ -16,12 +16,26 @@ let tasks = [
     { id: 5, task: "試著在貓咪睡覺時偷摸牠的肚子且不被識破。", completed: false },
 ];
 
-// Get all tasks
+// 取得任務清單
 app.get("/api/tasks", (req, res) => {
     res.json(tasks);
 });
+/* async function fetchTasks() {
+    try {
+        const response = await fetch("/api/tasks");
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("發生錯誤:", error);
+    }
+}
+*/
 
-// Add new Task
+
+// 新增任務
 app.post("/api/tasks", (req, res) => {
     const newTask = { id: tasks.length + 1, ...req.body, completed: false };
     tasks.push(newTask);
@@ -29,8 +43,26 @@ app.post("/api/tasks", (req, res) => {
     console.log(tasks);
     res.json(newTask);
 });
+/* async function addTask(description) {
+    try {
+        const response = await fetch("/api/tasks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description })
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("發生錯誤:", error);
+        throw error;
+    }
+}
+*/
 
-// Change task completed property
+// 更改任務完成狀態
 app.patch("/api/tasks/:id", (req, res) => {
     const id = parseInt(req.params.id);
     const index = tasks.findIndex((task) => task.id === id);
@@ -39,13 +71,45 @@ app.patch("/api/tasks/:id", (req, res) => {
 
     res.json(task);
 });
+/* async function updateTaskStatus(id, completed) {
+    try {
+    const response = await fetch(`/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed })
+    });
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log(data);
+    } catch (error) {
+        console.error("發生錯誤:", error);
+    }
+}  
+*/
 
-// Delete Specific task
+// 刪除特定任務
 app.delete("/api/tasks/:id", (req, res) => {
     const id = parseInt(req.params.id);
     tasks = tasks.filter((task) => task.id !== id);
 
     res.json({ id });
 });
+/*async function deleteTask(id) {
+    try {
+        const response = await fetch(`/api/tasks/${id}`, {
+        method: "DELETE"
+        });
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("發生錯誤:", error);
+    }
+}
+*/
 
 app.listen(5000, () => console.log("Server running on port 5000"));
